@@ -15,6 +15,7 @@ dagreGraph.setDefaultEdgeLabel(() => ({}));
 const nodeWidth = 50;
 const nodeHeight = 50;
 
+// Auto layout using dagre
 const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'TB') => {
     const isHorizontal = direction === 'LR';
     dagreGraph.setGraph({rankdir: direction});
@@ -50,6 +51,8 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'TB') => 
 export default function App() {
     const [nodes, setNodes] = useState<Node[]>([])
     const [edges, setEdges] = useState<Edge[]>([])
+
+    // Custom node component
     const nodeTypes = useMemo(() => ({circle: CircleNode}), []);
 
     useEffect(() => {
@@ -57,12 +60,11 @@ export default function App() {
     })
 
     useEffect(() => {
-        fetch("https://localhost:9000/workflow/processes/74846263-427f-4f42-bd97-0684782f9061", {
+        fetch("http://120.72.85.78:8000/workflow/processes/c89e83c2-c045-4aa0-aed9-735c13a6cfda", {
             headers: {
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJkMzc3Y2ZmNC1lZTM5LTQyNTQtOGI4MC03Yzg1NGZiN2U0YmUiLCJ1bmlxdWVfbmFtZSI6ImxpYnJhcnkiLCJlbWFpbCI6InRlc3RlcjEyQGdtYWlsLmNvbSIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTY0ODc4MDAzMiwiZXhwIjoxNjQ4Nzk0NDMyLCJpYXQiOjE2NDg3ODAwMzIsImlzcyI6IkRNU19BdXRoIn0.7sC07cFrj1fXTpv7Ddl6_d3U1oC-DGK9VgVXNnhHYdc"
+                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJkMzc3Y2ZmNC1lZTM5LTQyNTQtOGI4MC03Yzg1NGZiN2U0YmUiLCJ1bmlxdWVfbmFtZSI6ImxpYnJhcnkiLCJlbWFpbCI6InRlc3RlcjEyQGdtYWlsLmNvbSIsIm5iZiI6MTY0ODgyMDU1NSwiZXhwIjoxNjQ4ODM0OTU1LCJpYXQiOjE2NDg4MjA1NTUsImlzcyI6IkRNU19BdXRoIn0.HCKka_E0cHcTQ8ixpQnYGBlWykTBK9Y3PyZagimcBXo"
             }
         }).then<APIResult<ProcessInstanceDetails>>(res => res.json()).then(res => {
-            console.log(res)
             const {nodes: layoutNodes, edges: layoutEdges} = getLayoutedElements(res.result.activities.map(act => {
                 return {
                     id: act.name,
@@ -94,7 +96,7 @@ export default function App() {
                 fitView
                 fitViewOptions={fitViewOptions}
             >
-                <Background color={"green"} />
+                <Background color={"green"}/>
             </ReactFlow>
             <ReactTooltip/>
         </div>
